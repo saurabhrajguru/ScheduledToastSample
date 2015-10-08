@@ -7,6 +7,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -53,6 +54,13 @@ namespace ScheduledToastSample
 #endif
 
             Frame rootFrame = Window.Current.Content as Frame;
+
+            //Check for launch arguments
+            if (!string.IsNullOrEmpty(e.Arguments))
+            {
+                MessageDialog md = new MessageDialog("I am launched from Toast", "MyApp");
+                var result = md.ShowAsync().AsTask().Result;
+            }
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active

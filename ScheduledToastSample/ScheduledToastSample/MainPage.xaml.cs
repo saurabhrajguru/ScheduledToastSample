@@ -69,7 +69,35 @@ namespace ScheduledToastSample
             //Creating Scheduled toast and adding it to schedule
             ScheduledToastNotification scheduleToast = new ScheduledToastNotification(toastXml, DateTime.Today.Add(NotificationTime.Time));
             notifier.AddToSchedule(scheduleToast);
+        }
 
+        /// <summary>
+        /// Handles the Click event of the LaunchParams control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void LaunchParams_Click(object sender, RoutedEventArgs e)
+        {
+            var notifier = ToastNotificationManager.CreateToastNotifier();
+
+            //Removing previous schedules
+            foreach (var scheduledNotification in notifier.GetScheduledToastNotifications())
+                notifier.RemoveFromSchedule(scheduledNotification);
+
+            //Creating xml template for Toast
+            ToastTemplateType toastType = ToastTemplateType.ToastText01;
+            XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(toastType);
+            XmlNodeList toastTextElement = toastXml.GetElementsByTagName("text");
+            toastTextElement[0].AppendChild(toastXml.CreateTextNode("Hi ! This was scheduled"));
+
+            //Adding Launch Pararms
+            XmlAttribute launch = toastXml.CreateAttribute("launch");
+            launch.Value = "Launch Params";
+            toastXml.GetElementsByTagName("toast")[0].Attributes.SetNamedItem(launch);
+
+            //Creating Scheduled toast and adding it to schedule
+            ScheduledToastNotification scheduleToast = new ScheduledToastNotification(toastXml, DateTime.Today.Add(NotificationTime.Time));
+            notifier.AddToSchedule(scheduleToast);
         }
     }
 }
